@@ -1,0 +1,318 @@
+---
+title: "Using the Consibio Cloud Package"
+output: rmarkdown::html_vignette
+date: "`r Sys.Date()`"
+vignette: >
+  %\VignetteIndexEntry{Using the Consibio Cloud Package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
+
+## Introduction
+
+This vignette provides a detailed example of how to use the `consibiocloudclient` package.
+
+The `consibiocloudclient` package is a R-package that allows you to interact with the Consibio Cloud API.
+
+The package provides a simple interface to the Consibio Cloud API, allowing you to fetch data from the server, and plot it using `ggplot2`.
+
+If you ever need to look deeper into our API, you can find the Swagger user interface at [https://api.v2.consibio.com/api-docs/](https://api.v2.consibio.com/api-docs/).
+
+Please note that our R-package does not cover all the endpoints in our API. The primary usage are to fetch data to be used in R, and to plot it.
+
+## Your first call to the Consibio Cloud API
+
+The first thing to do after loading our library, is to make a call to our API. Before going into the details on how to authenticate, fetch data, and plot it, we'll show you how to make a simple call to our API.
+
+We'll use our `/test` endpoint, which should be seen as our health check endpoint. We expose a JSON object with a "status" and a "time" key.
+
+```{r}
+library(consibiocloudclient)
+
+# After loading our package, try and make a api status call.
+result <- get_test()
+status <- result$status
+time <- result$time
+```
+
+## Authentication
+
+Logging in to Consibio Cloud is done by calling the `login` function, which takes your username (email) as argument.
+
+Once executed, a password prompt will appear, and you'll be asked to enter your password.
+
+After a successful login, a token will be stored in memory.
+
+```{r}
+login("bob@helloworld.com")
+```
+
+If you want to log out, you can call the `logout` function.
+
+```{r}
+logout()
+```
+
+After logging out, it's necessary to restart your R-session in other to remove any token stored in memory.
+
+### Setting credentials in environment file
+
+It's possible to set your credentials in a `.env` file, which is a common way to store sensitive information.
+
+Add the following values:
+
+```env
+CONSIBIO_USERNAME=your_username
+CONSIBIO_PASSWORD=your_password
+```
+
+Always remember to clean up your `.env` file after usage.
+
+## Getting data
+
+The R-package does not scope the full API, but it does provide a simple way to fetch data from the server.
+
+Therefore it's limited to GET-requests at the moment.
+
+Endpoints specific for a given project, like "get_elements", requires you to set the option "consibio.project_id".
+
+That can be done with the following command:
+
+```{r}
+set_project_id(target_project)
+```
+
+You can also use the native function in R to set the option:
+
+```{r}
+options("consibio.project_id" = "your_project_id")
+```
+
+It's possible to get the project_id by calling the `get_project_id` function.
+
+### Get users/me
+
+Get your own user information.
+
+```{r}
+user <- get_users_me()
+```
+
+
+### Get projects
+
+Get all projects.
+
+```{r}
+projects <- get_projects()
+```
+
+### Get project
+
+Get a specific project. 
+
+Here it's possible to provide the project_id as an argument. But you can also set the "consibio.project_id" option.
+
+If you set the option, you can call the function without any arguments.
+
+```{r}
+project <- get_project()
+```
+
+### Get devices
+
+Get all devices. Set the "consibio.project_id" option, before calling the function.
+
+```{r}
+devices <- get_devices()
+```
+
+### Get device
+
+Get a specific device. Set the "consibio.project_id" option, before calling the function.
+
+```{r}
+device <- get_device("your_device_id")
+```
+
+### Get elements
+
+Get all elements. Set the "consibio.project_id" option, before calling the function.
+
+```{r}
+elements <- get_elements()
+
+# Get element ids
+element_ids <- names(elements)
+```
+
+### Get element
+
+Get a specific element. Set the "consibio.project_id" option, before calling the function.
+
+```{r}
+element <- get_element("your_element_id")
+```
+
+### Get datalog
+
+Get datalog for a list of elements. Set the "consibio.project_id" option, before calling the function.
+
+The datalog expects:
+
+- `element_ids`: A list of element ids (Max 25 elements)
+- `from_time`: A start date (`POSIXct` or numeric)
+- `to_time`: An end date (`POSIXct` or numeric)
+
+Optional parameters:
+
+- `interval`: Optional: An interval in seconds (numeric)
+- `raw`: Optional: A boolean to get raw data (logical)
+
+The function will return a data frame with the datalog, containing the following columns:
+
+- `element_id`
+- `time`
+- `value`
+
+```{r}
+element_ids <- c("your_element_id_1", "your_element_id_2")
+to_time <- Sys.time()
+from_time <- to_time - 1 * 24 * 60 * 60 # 1 days
+df <- get_datalog(element_ids, from_time, to_time)
+```
+
+
+## Plotting data
+
+There's no build in plotting function in the package, but it's easy to plot the data using `ggplot2`.
+
+Here's a full example of how to use all the mentioned functions in the package, manipulate it, and plot it with `ggplot2`.
+
+```{r eval=FALSE}
+library(consibiocloudclient)
+
+# Login 
+login("bob@helloworld.com") # This will shows a prompt to enter password. If you wan't to use a static password (not recommended), set CONSIBIO_PASSWORD as env. variable before trying to login
+
+# Get user
+get_users_me()
+
+# Get projects
+projects <- get_projects()
+target_project <- names(projects)[1]
+
+# Set target project (can also be done with the native R function: options(consibio.project_id = target_project))
+set_project_id(target_project)
+
+# Get project
+project <- get_project()
+
+# Get devices
+devices <- get_devices()
+
+# Get elements
+elements <- get_elements()
+
+# Make list with elements
+element_ids <- names(elements)
+
+# Limit the scope to maximum 25 elements, which are the maximum amount of elements that can be fetched at once
+element_ids <- element_ids[1:25]
+
+# Get datalog
+to_time <- Sys.time()
+from_time <- to_time - 1 * 24 * 60 * 60 # 1 days
+df <- get_datalog(element_ids, from_time, to_time)
+
+############
+# Element checks before plotting the data
+############
+# Get the elements from the df without data, but was queried
+elements_without_data <- c() # Initialize an empty vector to store the elements without data
+# Loop over each element in element_ids If the element is not in df$element_id, add it to elements_without_data
+for (element in element_ids)
+  if (!element %in% df$element_id)
+    elements_without_data <- c(elements_without_data, element)
+# print(elements_without_data)
+
+# Find the elements in element_ids that are in df$element_id
+elements_with_data <- setdiff(element_ids, elements_without_data)
+# print(elements_with_data)
+
+# Print a single line statement with the total, with and without
+sprintf(
+  "Got %d elements with data, and %d witout.",
+  length(elements_with_data),
+  length(elements_without_data)
+)
+
+
+############
+# Example on how to print a plot with the dataframe values, where we use the name and color of each fetched element
+############
+# Create a data frame with the element IDs, names, and colors
+df_element_default <- data.frame(
+  element_id = names(elements),
+  name = sapply(elements, function(x)
+    x$name),
+  color = sapply(elements, function(x)
+    x$color)
+)
+
+# Merge the element data frame with the original data frame
+df_extended <- merge(df, df_element_default, by = "element_id", all.x = TRUE)
+
+# df_extended <- df_extended[df_extended$element_id == "jedBIJcmzw6tGLKvmtbm",] # Limit to a single element, if you need to test something
+
+if (!require(ggplot2)) {
+  install.packages("ggplot2")
+}
+library(ggplot2)
+
+# Create a line plot with `ggplot2`
+render_without_colors <- TRUE # If the colors are identical, or similar, the plot will replace the existing scales. If so, it's possible to render without the colors
+if (render_without_colors) {
+  ggplot(df_extended,
+         aes(
+           x = timestamp,
+           y = value,
+           color = name,
+           group = element_id
+         )) +
+    geom_line() +
+    labs(title = "Consibio Cloud Plot", x = "Timestamp", y = "Value") +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    scale_color_manual(
+      values = setNames(df_extended$color, df_extended$name),
+      guide = guide_legend(title = "Element Name")
+    ) +
+    scale_x_datetime(date_labels = "%Y-%m-%d %H:%M:%S")
+} else{
+  ggplot(df_extended,
+         aes(
+           x = timestamp,
+           y = value,
+           color = color,
+           group = element_id
+         )) +
+    geom_line() +
+    labs(title = "Consibio Cloud Plot", x = "Timestamp", y = "Value") +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    scale_color_identity() +
+    guides(color = guide_legend(title = "Element Name")) +
+    scale_color_discrete(labels = df_extended$name) +
+    scale_x_datetime(date_labels = "%Y-%m-%d %H:%M:%S")
+}
+
+# Logout
+logout() # Will remove username and user_id. Please reset your R-session to remove any tokens (which are saved automatically in memory)
+```

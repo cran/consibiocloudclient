@@ -1,0 +1,10 @@
+structure(list(method = "POST", url = "v2/oauth/token", status_code = 200L, 
+    headers = structure(list(`x-powered-by` = "Express", `access-control-allow-origin` = "*", 
+        `access-control-allow-methods` = "GET, POST, PUT, DELETE, OPTIONS", 
+        `access-control-allow-headers` = "Content-Type, Authorization", 
+        `content-type` = "application/json; charset=utf-8", etag = "W/\"423-fC7CQCeJqkbDRSeQdqyDCqbHzGw\"", 
+        `x-cloud-trace-context` = "35ba21afaa6eb8945ab1fc51f116d065", 
+        date = "Thu, 18 Jul 2024 09:12:45 GMT", server = "Google Frontend", 
+        `content-length` = "1059"), class = "httr2_headers"), 
+    body = charToRaw("{\"access_token\":\"REDACTED\",\"expires_in\":3600,\"user_id\":\"beHcmEvYDf1\",\"email\":\"api-test-user@consibio.com\"}"), 
+    cache = new.env(parent = emptyenv())), class = "httr2_response")

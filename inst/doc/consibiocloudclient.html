@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+<meta name="date" content="2024-07-29" />
+
+<title>Using the Consibio Cloud Package</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Using the Consibio Cloud Package</h1>
+<h4 class="date">2024-07-29</h4>
+
+
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>This vignette provides a detailed example of how to use the
+<code>consibiocloudclient</code> package.</p>
+<p>The <code>consibiocloudclient</code> package is a R-package that
+allows you to interact with the Consibio Cloud API.</p>
+<p>The package provides a simple interface to the Consibio Cloud API,
+allowing you to fetch data from the server, and plot it using
+<code>ggplot2</code>.</p>
+<p>If you ever need to look deeper into our API, you can find the
+Swagger user interface at <a href="https://api.v2.consibio.com/api-docs/">https://api.v2.consibio.com/api-docs/</a>.</p>
+<p>Please note that our R-package does not cover all the endpoints in
+our API. The primary usage are to fetch data to be used in R, and to
+plot it.</p>
+</div>
+<div id="your-first-call-to-the-consibio-cloud-api" class="section level2">
+<h2>Your first call to the Consibio Cloud API</h2>
+<p>The first thing to do after loading our library, is to make a call to
+our API. Before going into the details on how to authenticate, fetch
+data, and plot it, we’ll show you how to make a simple call to our
+API.</p>
+<p>We’ll use our <code>/test</code> endpoint, which should be seen as
+our health check endpoint. We expose a JSON object with a “status” and a
+“time” key.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(consibiocloudclient)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="co"># After loading our package, try and make a api status call.</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">get_test</span>()</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>status <span class="ot">&lt;-</span> result<span class="sc">$</span>status</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>time <span class="ot">&lt;-</span> result<span class="sc">$</span>time</span></code></pre></div>
+</div>
+<div id="authentication" class="section level2">
+<h2>Authentication</h2>
+<p>Logging in to Consibio Cloud is done by calling the
+<code>login</code> function, which takes your username (email) as
+argument.</p>
+<p>Once executed, a password prompt will appear, and you’ll be asked to
+enter your password.</p>
+<p>After a successful login, a token will be stored in memory.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">login</span>(<span class="st">&quot;bob@helloworld.com&quot;</span>)</span></code></pre></div>
+<p>If you want to log out, you can call the <code>logout</code>
+function.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">logout</span>()</span></code></pre></div>
+<p>After logging out, it’s necessary to restart your R-session in other
+to remove any token stored in memory.</p>
+<div id="setting-credentials-in-environment-file" class="section level3">
+<h3>Setting credentials in environment file</h3>
+<p>It’s possible to set your credentials in a <code>.env</code> file,
+which is a common way to store sensitive information.</p>
+<p>Add the following values:</p>
+<pre class="env"><code>CONSIBIO_USERNAME=your_username
+CONSIBIO_PASSWORD=your_password</code></pre>
+<p>Always remember to clean up your <code>.env</code> file after
+usage.</p>
+</div>
+</div>
+<div id="getting-data" class="section level2">
+<h2>Getting data</h2>
+<p>The R-package does not scope the full API, but it does provide a
+simple way to fetch data from the server.</p>
+<p>Therefore it’s limited to GET-requests at the moment.</p>
+<p>Endpoints specific for a given project, like “get_elements”, requires
+you to set the option “consibio.project_id”.</p>
+<p>That can be done with the following command:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">set_project_id</span>(target_project)</span></code></pre></div>
+<p>You can also use the native function in R to set the option:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">options</span>(<span class="st">&quot;consibio.project_id&quot;</span> <span class="ot">=</span> <span class="st">&quot;your_project_id&quot;</span>)</span></code></pre></div>
+<p>It’s possible to get the project_id by calling the
+<code>get_project_id</code> function.</p>
+<div id="get-usersme" class="section level3">
+<h3>Get users/me</h3>
+<p>Get your own user information.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>user <span class="ot">&lt;-</span> <span class="fu">get_users_me</span>()</span></code></pre></div>
+</div>
+<div id="get-projects" class="section level3">
+<h3>Get projects</h3>
+<p>Get all projects.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>projects <span class="ot">&lt;-</span> <span class="fu">get_projects</span>()</span></code></pre></div>
+</div>
+<div id="get-project" class="section level3">
+<h3>Get project</h3>
+<p>Get a specific project.</p>
+<p>Here it’s possible to provide the project_id as an argument. But you
+can also set the “consibio.project_id” option.</p>
+<p>If you set the option, you can call the function without any
+arguments.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>project <span class="ot">&lt;-</span> <span class="fu">get_project</span>()</span></code></pre></div>
+</div>
+<div id="get-devices" class="section level3">
+<h3>Get devices</h3>
+<p>Get all devices. Set the “consibio.project_id” option, before calling
+the function.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>devices <span class="ot">&lt;-</span> <span class="fu">get_devices</span>()</span></code></pre></div>
+</div>
+<div id="get-device" class="section level3">
+<h3>Get device</h3>
+<p>Get a specific device. Set the “consibio.project_id” option, before
+calling the function.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>device <span class="ot">&lt;-</span> <span class="fu">get_device</span>(<span class="st">&quot;your_device_id&quot;</span>)</span></code></pre></div>
+</div>
+<div id="get-elements" class="section level3">
+<h3>Get elements</h3>
+<p>Get all elements. Set the “consibio.project_id” option, before
+calling the function.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>elements <span class="ot">&lt;-</span> <span class="fu">get_elements</span>()</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="co"># Get element ids</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>element_ids <span class="ot">&lt;-</span> <span class="fu">names</span>(elements)</span></code></pre></div>
+</div>
+<div id="get-element" class="section level3">
+<h3>Get element</h3>
+<p>Get a specific element. Set the “consibio.project_id” option, before
+calling the function.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>element <span class="ot">&lt;-</span> <span class="fu">get_element</span>(<span class="st">&quot;your_element_id&quot;</span>)</span></code></pre></div>
+</div>
+<div id="get-datalog" class="section level3">
+<h3>Get datalog</h3>
+<p>Get datalog for a list of elements. Set the “consibio.project_id”
+option, before calling the function.</p>
+<p>The datalog expects:</p>
+<ul>
+<li><code>element_ids</code>: A list of element ids (Max 25
+elements)</li>
+<li><code>from_time</code>: A start date (<code>POSIXct</code> or
+numeric)</li>
+<li><code>to_time</code>: An end date (<code>POSIXct</code> or
+numeric)</li>
+</ul>
+<p>Optional parameters:</p>
+<ul>
+<li><code>interval</code>: Optional: An interval in seconds
+(numeric)</li>
+<li><code>raw</code>: Optional: A boolean to get raw data (logical)</li>
+</ul>
+<p>The function will return a data frame with the datalog, containing
+the following columns:</p>
+<ul>
+<li><code>element_id</code></li>
+<li><code>time</code></li>
+<li><code>value</code></li>
+</ul>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>element_ids <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;your_element_id_1&quot;</span>, <span class="st">&quot;your_element_id_2&quot;</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>to_time <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>from_time <span class="ot">&lt;-</span> to_time <span class="sc">-</span> <span class="dv">1</span> <span class="sc">*</span> <span class="dv">24</span> <span class="sc">*</span> <span class="dv">60</span> <span class="sc">*</span> <span class="dv">60</span> <span class="co"># 1 days</span></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">get_datalog</span>(element_ids, from_time, to_time)</span></code></pre></div>
+</div>
+</div>
+<div id="plotting-data" class="section level2">
+<h2>Plotting data</h2>
+<p>There’s no build in plotting function in the package, but it’s easy
+to plot the data using <code>ggplot2</code>.</p>
+<p>Here’s a full example of how to use all the mentioned functions in
+the package, manipulate it, and plot it with <code>ggplot2</code>.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">library</span>(consibiocloudclient)</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="co"># Login </span></span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="fu">login</span>(<span class="st">&quot;bob@helloworld.com&quot;</span>) <span class="co"># This will shows a prompt to enter password. If you wan&#39;t to use a static password (not recommended), set CONSIBIO_PASSWORD as env. variable before trying to login</span></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a><span class="co"># Get user</span></span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a><span class="fu">get_users_me</span>()</span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a><span class="co"># Get projects</span></span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a>projects <span class="ot">&lt;-</span> <span class="fu">get_projects</span>()</span>
+<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a>target_project <span class="ot">&lt;-</span> <span class="fu">names</span>(projects)[<span class="dv">1</span>]</span>
+<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a></span>
+<span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a><span class="co"># Set target project (can also be done with the native R function: options(consibio.project_id = target_project))</span></span>
+<span id="cb15-14"><a href="#cb15-14" tabindex="-1"></a><span class="fu">set_project_id</span>(target_project)</span>
+<span id="cb15-15"><a href="#cb15-15" tabindex="-1"></a></span>
+<span id="cb15-16"><a href="#cb15-16" tabindex="-1"></a><span class="co"># Get project</span></span>
+<span id="cb15-17"><a href="#cb15-17" tabindex="-1"></a>project <span class="ot">&lt;-</span> <span class="fu">get_project</span>()</span>
+<span id="cb15-18"><a href="#cb15-18" tabindex="-1"></a></span>
+<span id="cb15-19"><a href="#cb15-19" tabindex="-1"></a><span class="co"># Get devices</span></span>
+<span id="cb15-20"><a href="#cb15-20" tabindex="-1"></a>devices <span class="ot">&lt;-</span> <span class="fu">get_devices</span>()</span>
+<span id="cb15-21"><a href="#cb15-21" tabindex="-1"></a></span>
+<span id="cb15-22"><a href="#cb15-22" tabindex="-1"></a><span class="co"># Get elements</span></span>
+<span id="cb15-23"><a href="#cb15-23" tabindex="-1"></a>elements <span class="ot">&lt;-</span> <span class="fu">get_elements</span>()</span>
+<span id="cb15-24"><a href="#cb15-24" tabindex="-1"></a></span>
+<span id="cb15-25"><a href="#cb15-25" tabindex="-1"></a><span class="co"># Make list with elements</span></span>
+<span id="cb15-26"><a href="#cb15-26" tabindex="-1"></a>element_ids <span class="ot">&lt;-</span> <span class="fu">names</span>(elements)</span>
+<span id="cb15-27"><a href="#cb15-27" tabindex="-1"></a></span>
+<span id="cb15-28"><a href="#cb15-28" tabindex="-1"></a><span class="co"># Limit the scope to maximum 25 elements, which are the maximum amount of elements that can be fetched at once</span></span>
+<span id="cb15-29"><a href="#cb15-29" tabindex="-1"></a>element_ids <span class="ot">&lt;-</span> element_ids[<span class="dv">1</span><span class="sc">:</span><span class="dv">25</span>]</span>
+<span id="cb15-30"><a href="#cb15-30" tabindex="-1"></a></span>
+<span id="cb15-31"><a href="#cb15-31" tabindex="-1"></a><span class="co"># Get datalog</span></span>
+<span id="cb15-32"><a href="#cb15-32" tabindex="-1"></a>to_time <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
+<span id="cb15-33"><a href="#cb15-33" tabindex="-1"></a>from_time <span class="ot">&lt;-</span> to_time <span class="sc">-</span> <span class="dv">1</span> <span class="sc">*</span> <span class="dv">24</span> <span class="sc">*</span> <span class="dv">60</span> <span class="sc">*</span> <span class="dv">60</span> <span class="co"># 1 days</span></span>
+<span id="cb15-34"><a href="#cb15-34" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">get_datalog</span>(element_ids, from_time, to_time)</span>
+<span id="cb15-35"><a href="#cb15-35" tabindex="-1"></a></span>
+<span id="cb15-36"><a href="#cb15-36" tabindex="-1"></a><span class="do">############</span></span>
+<span id="cb15-37"><a href="#cb15-37" tabindex="-1"></a><span class="co"># Element checks before plotting the data</span></span>
+<span id="cb15-38"><a href="#cb15-38" tabindex="-1"></a><span class="do">############</span></span>
+<span id="cb15-39"><a href="#cb15-39" tabindex="-1"></a><span class="co"># Get the elements from the df without data, but was queried</span></span>
+<span id="cb15-40"><a href="#cb15-40" tabindex="-1"></a>elements_without_data <span class="ot">&lt;-</span> <span class="fu">c</span>() <span class="co"># Initialize an empty vector to store the elements without data</span></span>
+<span id="cb15-41"><a href="#cb15-41" tabindex="-1"></a><span class="co"># Loop over each element in element_ids If the element is not in df$element_id, add it to elements_without_data</span></span>
+<span id="cb15-42"><a href="#cb15-42" tabindex="-1"></a><span class="cf">for</span> (element <span class="cf">in</span> element_ids)</span>
+<span id="cb15-43"><a href="#cb15-43" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span>element <span class="sc">%in%</span> df<span class="sc">$</span>element_id)</span>
+<span id="cb15-44"><a href="#cb15-44" tabindex="-1"></a>    elements_without_data <span class="ot">&lt;-</span> <span class="fu">c</span>(elements_without_data, element)</span>
+<span id="cb15-45"><a href="#cb15-45" tabindex="-1"></a><span class="co"># print(elements_without_data)</span></span>
+<span id="cb15-46"><a href="#cb15-46" tabindex="-1"></a></span>
+<span id="cb15-47"><a href="#cb15-47" tabindex="-1"></a><span class="co"># Find the elements in element_ids that are in df$element_id</span></span>
+<span id="cb15-48"><a href="#cb15-48" tabindex="-1"></a>elements_with_data <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(element_ids, elements_without_data)</span>
+<span id="cb15-49"><a href="#cb15-49" tabindex="-1"></a><span class="co"># print(elements_with_data)</span></span>
+<span id="cb15-50"><a href="#cb15-50" tabindex="-1"></a></span>
+<span id="cb15-51"><a href="#cb15-51" tabindex="-1"></a><span class="co"># Print a single line statement with the total, with and without</span></span>
+<span id="cb15-52"><a href="#cb15-52" tabindex="-1"></a><span class="fu">sprintf</span>(</span>
+<span id="cb15-53"><a href="#cb15-53" tabindex="-1"></a>  <span class="st">&quot;Got %d elements with data, and %d witout.&quot;</span>,</span>
+<span id="cb15-54"><a href="#cb15-54" tabindex="-1"></a>  <span class="fu">length</span>(elements_with_data),</span>
+<span id="cb15-55"><a href="#cb15-55" tabindex="-1"></a>  <span class="fu">length</span>(elements_without_data)</span>
+<span id="cb15-56"><a href="#cb15-56" tabindex="-1"></a>)</span>
+<span id="cb15-57"><a href="#cb15-57" tabindex="-1"></a></span>
+<span id="cb15-58"><a href="#cb15-58" tabindex="-1"></a></span>
+<span id="cb15-59"><a href="#cb15-59" tabindex="-1"></a><span class="do">############</span></span>
+<span id="cb15-60"><a href="#cb15-60" tabindex="-1"></a><span class="co"># Example on how to print a plot with the dataframe values, where we use the name and color of each fetched element</span></span>
+<span id="cb15-61"><a href="#cb15-61" tabindex="-1"></a><span class="do">############</span></span>
+<span id="cb15-62"><a href="#cb15-62" tabindex="-1"></a><span class="co"># Create a data frame with the element IDs, names, and colors</span></span>
+<span id="cb15-63"><a href="#cb15-63" tabindex="-1"></a>df_element_default <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb15-64"><a href="#cb15-64" tabindex="-1"></a>  <span class="at">element_id =</span> <span class="fu">names</span>(elements),</span>
+<span id="cb15-65"><a href="#cb15-65" tabindex="-1"></a>  <span class="at">name =</span> <span class="fu">sapply</span>(elements, <span class="cf">function</span>(x)</span>
+<span id="cb15-66"><a href="#cb15-66" tabindex="-1"></a>    x<span class="sc">$</span>name),</span>
+<span id="cb15-67"><a href="#cb15-67" tabindex="-1"></a>  <span class="at">color =</span> <span class="fu">sapply</span>(elements, <span class="cf">function</span>(x)</span>
+<span id="cb15-68"><a href="#cb15-68" tabindex="-1"></a>    x<span class="sc">$</span>color)</span>
+<span id="cb15-69"><a href="#cb15-69" tabindex="-1"></a>)</span>
+<span id="cb15-70"><a href="#cb15-70" tabindex="-1"></a></span>
+<span id="cb15-71"><a href="#cb15-71" tabindex="-1"></a><span class="co"># Merge the element data frame with the original data frame</span></span>
+<span id="cb15-72"><a href="#cb15-72" tabindex="-1"></a>df_extended <span class="ot">&lt;-</span> <span class="fu">merge</span>(df, df_element_default, <span class="at">by =</span> <span class="st">&quot;element_id&quot;</span>, <span class="at">all.x =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb15-73"><a href="#cb15-73" tabindex="-1"></a></span>
+<span id="cb15-74"><a href="#cb15-74" tabindex="-1"></a><span class="co"># df_extended &lt;- df_extended[df_extended$element_id == &quot;jedBIJcmzw6tGLKvmtbm&quot;,] # Limit to a single element, if you need to test something</span></span>
+<span id="cb15-75"><a href="#cb15-75" tabindex="-1"></a></span>
+<span id="cb15-76"><a href="#cb15-76" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(ggplot2)) {</span>
+<span id="cb15-77"><a href="#cb15-77" tabindex="-1"></a>  <span class="fu">install.packages</span>(<span class="st">&quot;ggplot2&quot;</span>)</span>
+<span id="cb15-78"><a href="#cb15-78" tabindex="-1"></a>}</span>
+<span id="cb15-79"><a href="#cb15-79" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb15-80"><a href="#cb15-80" tabindex="-1"></a></span>
+<span id="cb15-81"><a href="#cb15-81" tabindex="-1"></a><span class="co"># Create a line plot with `ggplot2`</span></span>
+<span id="cb15-82"><a href="#cb15-82" tabindex="-1"></a>render_without_colors <span class="ot">&lt;-</span> <span class="cn">TRUE</span> <span class="co"># If the colors are identical, or similar, the plot will replace the existing scales. If so, it&#39;s possible to render without the colors</span></span>
+<span id="cb15-83"><a href="#cb15-83" tabindex="-1"></a><span class="cf">if</span> (render_without_colors) {</span>
+<span id="cb15-84"><a href="#cb15-84" tabindex="-1"></a>  <span class="fu">ggplot</span>(df_extended,</span>
+<span id="cb15-85"><a href="#cb15-85" tabindex="-1"></a>         <span class="fu">aes</span>(</span>
+<span id="cb15-86"><a href="#cb15-86" tabindex="-1"></a>           <span class="at">x =</span> timestamp,</span>
+<span id="cb15-87"><a href="#cb15-87" tabindex="-1"></a>           <span class="at">y =</span> value,</span>
+<span id="cb15-88"><a href="#cb15-88" tabindex="-1"></a>           <span class="at">color =</span> name,</span>
+<span id="cb15-89"><a href="#cb15-89" tabindex="-1"></a>           <span class="at">group =</span> element_id</span>
+<span id="cb15-90"><a href="#cb15-90" tabindex="-1"></a>         )) <span class="sc">+</span></span>
+<span id="cb15-91"><a href="#cb15-91" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb15-92"><a href="#cb15-92" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Consibio Cloud Plot&quot;</span>, <span class="at">x =</span> <span class="st">&quot;Timestamp&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Value&quot;</span>) <span class="sc">+</span></span>
+<span id="cb15-93"><a href="#cb15-93" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)) <span class="sc">+</span></span>
+<span id="cb15-94"><a href="#cb15-94" tabindex="-1"></a>    <span class="fu">scale_color_manual</span>(</span>
+<span id="cb15-95"><a href="#cb15-95" tabindex="-1"></a>      <span class="at">values =</span> <span class="fu">setNames</span>(df_extended<span class="sc">$</span>color, df_extended<span class="sc">$</span>name),</span>
+<span id="cb15-96"><a href="#cb15-96" tabindex="-1"></a>      <span class="at">guide =</span> <span class="fu">guide_legend</span>(<span class="at">title =</span> <span class="st">&quot;Element Name&quot;</span>)</span>
+<span id="cb15-97"><a href="#cb15-97" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb15-98"><a href="#cb15-98" tabindex="-1"></a>    <span class="fu">scale_x_datetime</span>(<span class="at">date_labels =</span> <span class="st">&quot;%Y-%m-%d %H:%M:%S&quot;</span>)</span>
+<span id="cb15-99"><a href="#cb15-99" tabindex="-1"></a>} <span class="cf">else</span>{</span>
+<span id="cb15-100"><a href="#cb15-100" tabindex="-1"></a>  <span class="fu">ggplot</span>(df_extended,</span>
+<span id="cb15-101"><a href="#cb15-101" tabindex="-1"></a>         <span class="fu">aes</span>(</span>
+<span id="cb15-102"><a href="#cb15-102" tabindex="-1"></a>           <span class="at">x =</span> timestamp,</span>
+<span id="cb15-103"><a href="#cb15-103" tabindex="-1"></a>           <span class="at">y =</span> value,</span>
+<span id="cb15-104"><a href="#cb15-104" tabindex="-1"></a>           <span class="at">color =</span> color,</span>
+<span id="cb15-105"><a href="#cb15-105" tabindex="-1"></a>           <span class="at">group =</span> element_id</span>
+<span id="cb15-106"><a href="#cb15-106" tabindex="-1"></a>         )) <span class="sc">+</span></span>
+<span id="cb15-107"><a href="#cb15-107" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb15-108"><a href="#cb15-108" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Consibio Cloud Plot&quot;</span>, <span class="at">x =</span> <span class="st">&quot;Timestamp&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Value&quot;</span>) <span class="sc">+</span></span>
+<span id="cb15-109"><a href="#cb15-109" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)) <span class="sc">+</span></span>
+<span id="cb15-110"><a href="#cb15-110" tabindex="-1"></a>    <span class="fu">scale_color_identity</span>() <span class="sc">+</span></span>
+<span id="cb15-111"><a href="#cb15-111" tabindex="-1"></a>    <span class="fu">guides</span>(<span class="at">color =</span> <span class="fu">guide_legend</span>(<span class="at">title =</span> <span class="st">&quot;Element Name&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb15-112"><a href="#cb15-112" tabindex="-1"></a>    <span class="fu">scale_color_discrete</span>(<span class="at">labels =</span> df_extended<span class="sc">$</span>name) <span class="sc">+</span></span>
+<span id="cb15-113"><a href="#cb15-113" tabindex="-1"></a>    <span class="fu">scale_x_datetime</span>(<span class="at">date_labels =</span> <span class="st">&quot;%Y-%m-%d %H:%M:%S&quot;</span>)</span>
+<span id="cb15-114"><a href="#cb15-114" tabindex="-1"></a>}</span>
+<span id="cb15-115"><a href="#cb15-115" tabindex="-1"></a></span>
+<span id="cb15-116"><a href="#cb15-116" tabindex="-1"></a><span class="co"># Logout</span></span>
+<span id="cb15-117"><a href="#cb15-117" tabindex="-1"></a><span class="fu">logout</span>() <span class="co"># Will remove username and user_id. Please reset your R-session to remove any tokens (which are saved automatically in memory)</span></span></code></pre></div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

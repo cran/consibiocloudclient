@@ -1,0 +1,92 @@
+{
+    "payload": {
+        "WcF": {
+            "sigDigits": 1,
+            "unit": "°C",
+            "name": "Simulated temperature",
+            "type": "",
+            "color": "#7c1313",
+            "element_type": "monitor",
+            "desired_output": {
+                "val": null,
+                "time": null
+            },
+            "last_cmd": {
+                "val": null,
+                "time": null
+            },
+            "connection_timeout": 60,
+            "source": "devices/eQ7/1/temperature",
+            "numeric": true,
+            "telemetry": {
+                "last_val": {
+                    "val": 22.917084910232198,
+                    "time": 1721293861.032
+                },
+                "cur_val": {
+                    "val": 22.878052179889046,
+                    "time": 1721293920.669
+                }
+            }
+        },
+        "hN0": {
+            "sigDigits": 1,
+            "unit": "°C",
+            "name": "Old not-used simulated temperature",
+            "type": "",
+            "color": "#813c0b",
+            "element_type": "monitor",
+            "desired_output": {
+                "time": null,
+                "val": null
+            },
+            "last_cmd": {
+                "time": null,
+                "val": null
+            },
+            "connection_timeout": 60,
+            "source": "",
+            "numeric": true,
+            "telemetry": {
+                "last_val": {
+                    "val": 0,
+                    "time": 0
+                },
+                "cur_val": {
+                    "val": 29.725037949230334,
+                    "time": 1720616161.153
+                }
+            }
+        },
+        "j20": {
+            "sigDigits": 1,
+            "unit": "°C",
+            "name": "Another simulated temperature",
+            "type": "",
+            "color": "#3a7369",
+            "element_type": "monitor",
+            "desired_output": {
+                "time": null,
+                "val": null
+            },
+            "last_cmd": {
+                "time": null,
+                "val": null
+            },
+            "connection_timeout": 60,
+            "source": "devices/YCM/1/0",
+            "numeric": true,
+            "telemetry": {
+                "last_val": {
+                    "val": 2.4269745792496527,
+                    "time": 1721293861.032
+                },
+                "cur_val": {
+                    "val": 26.017941554311143,
+                    "time": 1721293920.669
+                }
+            }
+        }
+    },
+    "status": "ok"
+}

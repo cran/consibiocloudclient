@@ -1,0 +1,19 @@
+{
+    "payload": {
+        "beHcmEvYDf1": {
+            "full_name": "Consibio Public Test user",
+            "company": "Consibio Test",
+            "last_login": 1721293936.553,
+            "phone": null,
+            "email": "api-test-user@consibio.com",
+            "preferences": {
+                "favorite_projects": [
+
+                ],
+                "ui_always_hide_left_sidebar": false
+            },
+            "email_verified_at": 1720615339.007
+        }
+    },
+    "status": "ok"
+}

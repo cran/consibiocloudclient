@@ -1,0 +1,34 @@
+{
+    "payload": {
+        "j20": {
+            "sigDigits": 1,
+            "unit": "°C",
+            "name": "Another simulated temperature",
+            "type": "",
+            "color": "#3a7369",
+            "element_type": "monitor",
+            "desired_output": {
+                "time": null,
+                "val": null
+            },
+            "last_cmd": {
+                "time": null,
+                "val": null
+            },
+            "connection_timeout": 60,
+            "source": "devices/YCM/1/0",
+            "numeric": true,
+            "telemetry": {
+                "last_val": {
+                    "val": 2.4269745792496527,
+                    "time": 1721293861.032
+                },
+                "cur_val": {
+                    "val": 26.017941554311143,
+                    "time": 1721293920.669
+                }
+            }
+        }
+    },
+    "status": "ok"
+}

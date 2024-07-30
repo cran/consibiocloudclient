@@ -1,0 +1,109 @@
+{
+    "payload": {
+        "YCM": {
+            "name": "Simulated device",
+            "type": "simulator",
+            "channels": {
+                "1": {
+                    "config": {
+
+                    },
+                    "sub_channels": {
+                        "temperature": {
+                            "element_id": "j20",
+                            "config": {
+                                "noise_range": 0.2,
+                                "simulator_type": "sine",
+                                "coefficients": [
+                                    15,
+                                    13,
+                                    3.2,
+                                    0,
+                                    0
+                                ]
+                            }
+                        }
+                    }
+                }
+            },
+            "controllers": {
+
+            },
+            "alarms": {
+
+            },
+            "expansion_A": "",
+            "expansion_B": "",
+            "max_offline": 0,
+            "max_interval": 300,
+            "telemetry_client": {
+
+            },
+            "location_id": "",
+            "project_id": "LIF",
+            "firmware": {
+                "current": "REDACTED",
+                "auto_update": true,
+                "broker": "REDACTED",
+                "target": "REDACTED"
+            },
+            "versions": {
+                "cloud": 0,
+                "device": 0
+            }
+        },
+        "eQ7": {
+            "name": "Simulated device",
+            "type": "simulator",
+            "channels": {
+                "1": {
+                    "sub_channels": {
+                        "temperature": {
+                            "element_id": "WcF",
+                            "config": {
+                                "simulator_type": "sine",
+                                "noise_range": 0.1,
+                                "coefficients": [
+                                    20,
+                                    10,
+                                    0.0000115,
+                                    0,
+                                    0
+                                ]
+                            }
+                        }
+                    },
+                    "config": {
+
+                    }
+                }
+            },
+            "controllers": {
+
+            },
+            "alarms": {
+
+            },
+            "expansion_A": "",
+            "expansion_B": "",
+            "max_offline": 0,
+            "max_interval": 300,
+            "telemetry_client": {
+
+            },
+            "location_id": "",
+            "project_id": "LIF",
+            "firmware": {
+                "current": "REDACTED",
+                "auto_update": true,
+                "broker": "REDACTED",
+                "target": "REDACTED"
+            },
+            "versions": {
+                "cloud": 0,
+                "device": 0
+            }
+        }
+    },
+    "status": "ok"
+}

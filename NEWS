@@ -1,0 +1,6 @@
+# consibiocloudclient 1.0.0
+
+Initial release of `consibiocloudclient`, to interact with the Consibio Cloud API.
+
+* Query data from resources with the `get_projects`, `get_elements`, `get_devices`, and `get_datalogs` functions. A singular resource can be fetched with `get_project`, `get_element`, `get_device`, and `get_datalog` functions.
+* Get a data frame in return with the `get_datalog` function

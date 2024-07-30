@@ -1,0 +1,10 @@
+structure(list(method = "GET", url = "v2/users/me", status_code = 200L, 
+    headers = structure(list(`x-powered-by` = "Express", `access-control-allow-origin` = "*", 
+        `access-control-allow-methods` = "GET, POST, PUT, DELETE, OPTIONS", 
+        `access-control-allow-headers` = "Content-Type, Authorization", 
+        `content-type` = "application/json; charset=utf-8", etag = "W/\"13a-4SEEi6kksysnX7lpWSJJjUlW+Rg\"", 
+        `x-cloud-trace-context` = "4a820dfedd06e1cf925bef08021ae548", 
+        date = "Thu, 18 Jul 2024 09:12:45 GMT", server = "Google Frontend", 
+        `content-length` = "314"), class = "httr2_headers"), 
+    body = charToRaw("{\"payload\":{\"beHcmEvYDf1\":{\"full_name\":\"Consibio Public Test user\",\"company\":\"Consibio Test\",\"last_login\":1721293936.553,\"phone\":null,\"email\":\"api-test-user@consibio.com\",\"preferences\":{\"favorite_projects\":[],\"ui_always_hide_left_sidebar\":false},\"email_verified_at\":1720615339.007}},\"status\":\"ok\"}"), 
+    cache = new.env(parent = emptyenv())), class = "httr2_response")

@@ -1,0 +1,15 @@
+{
+    "payload": {
+        "LIF": {
+            "name": "Consibio Public Test Project",
+            "roles": {
+                "bv2GQEN3zG2": "owner",
+                "beHcmEvYDf1": "viewer"
+            },
+            "invites": null,
+            "dealer": "",
+            "organization": ""
+        }
+    },
+    "status": "ok"
+}
